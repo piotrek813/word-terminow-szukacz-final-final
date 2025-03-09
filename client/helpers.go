@@ -5,9 +5,22 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+	"piotrek813/word-bo-piwo/consts"
+	"piotrek813/word-bo-piwo/notification"
+	"regexp"
 	"time"
 )
+
+func getTitle(body string) (string, error) {
+	re := regexp.MustCompile(`<title>(.*?)</title>`)
+	matches := re.FindStringSubmatch(body)
+	if len(matches) > 1 {
+		return matches[1], nil
+	}
+	return "", fmt.Errorf("No title found")
+}
 
 func GetPracticalExams(token string) ([]string, error) {
 	fmt.Printf("INFO [%v]: Fetching exam\n", time.Now())
@@ -48,6 +61,17 @@ func GetPracticalExams(token string) ([]string, error) {
 	fmt.Println("Response Status:", resp.Status)
 
 	body, err := io.ReadAll(resp.Body)
+
+	if title, err := getTitle(string(body)); err == nil {
+		err = fmt.Errorf("Invalid reponse expected json got html document with title: %v", title)
+
+		newSleep := consts.DEFAULT_SLEEP * 4
+		log.Println("INFO: Sleeping going to sleep for: " + newSleep.String())
+		time.Sleep(newSleep)
+
+		notification.SendError(err)
+		return nil, err
+	}
 
 	var reservation Reservation
 	if err := json.Unmarshal(body, &reservation); err != nil {

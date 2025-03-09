@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"piotrek813/word-bo-piwo/client"
+	"piotrek813/word-bo-piwo/consts"
 	"piotrek813/word-bo-piwo/notification"
 	"time"
 )
@@ -87,7 +88,7 @@ func main() {
 
 	fmt.Printf("bearer: %v\n", bearer)
 	for {
-		time.Sleep(3 * time.Second)
+		time.Sleep(consts.DEFAULT_SLEEP)
 		exams, err := client.GetPracticalExams(bearer)
 
 		if err != nil {

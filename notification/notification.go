@@ -2,11 +2,14 @@ package notification
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 )
 
 func SendError(error error) {
+	log.Println("ERROR: " + error.Error())
+
 	Send("No i jednak nie działa jak powinno", error.Error())
 }
 
