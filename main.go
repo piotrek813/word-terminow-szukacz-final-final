@@ -75,16 +75,23 @@ func checkForNewItems(filename string, newList []string) ([]string, error) {
 	return newItems, nil
 }
 
+func heartbeat() {
+	for {
+		time.Sleep(time.Hour)
+		notification.Send("Jeszcze sie nie wysrało", "Do usyszenia za godzinkę jeśli Bóg da")
+	}
+}
+
 func main() {
 	client.Init()
+
+	go heartbeat()
 
 	bearer, err := client.GetAccessToken()
 
 	if err != nil {
 		notification.SendError(err)
 	}
-
-	const filename = "list.txt"
 
 	fmt.Printf("bearer: %v\n", bearer)
 	for {
@@ -95,7 +102,8 @@ func main() {
 			notification.SendError(err)
 		}
 
-		newItems, err := checkForNewItems(filename, exams)
+		newItems, err := checkForNewItems(consts.FILENAME, exams)
+
 		if err != nil {
 			notification.SendError(err)
 		}
@@ -106,12 +114,13 @@ func main() {
 			continue
 		}
 
-		fmt.Println("New items added:")
+		fmt.Println("New exam term foudn:")
 		for _, item := range newItems {
+			fmt.Printf("term: %v\n", item)
 			notification.Send("Hallelujah", "nowy termin: "+item)
 		}
 
-		err = saveListToFile(filename, exams)
+		err = saveListToFile(consts.FILENAME, exams)
 		if err != nil {
 			notification.SendError(err)
 		}
