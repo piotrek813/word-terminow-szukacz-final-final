@@ -8,14 +8,14 @@ import (
 )
 
 const (
-	TOKEN_PIOTREK = "djo2mpG6o"
-	TOKEN_AGATA   = "RX75mpG6L"
+	// TOKEN_PIOTREK = "djo2mpG6o"
+	TOKEN_AGATA = "RX75mpG6L"
 )
 
 func SendError(error error) {
 	log.Println("ERROR: " + error.Error())
 
-	Send("No i jednak nie działa jak powinno", error.Error(), TOKEN_PIOTREK)
+	// Send("No i jednak nie działa jak powinno", error.Error(), TOKEN_PIOTREK)
 }
 
 func Send(title string, message string, token string) {

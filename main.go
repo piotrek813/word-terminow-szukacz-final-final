@@ -76,19 +76,19 @@ func checkForNewItems(filename string, newList []string) ([]string, error) {
 	return newItems, nil
 }
 
-func heartbeat() {
-	for {
-		time.Sleep(time.Hour)
-		notification.Send("Jeszcze sie nie wysrało", "Do usyszenia za godzinkę jeśli Bóg da", notification.TOKEN_PIOTREK)
-	}
-}
+// func heartbeat() {
+// 	for {
+// 		time.Sleep(time.Hour)
+// 		notification.Send("Jeszcze sie nie wysrało", "Do usyszenia za godzinkę jeśli Bóg da", notification.TOKEN_PIOTREK)
+// 	}
+// }
 
 func main() {
 	log.Println("INFO: Starting up...")
 
 	client.Init()
 
-	go heartbeat()
+	// go heartbeat()
 
 	for {
 		time.Sleep(consts.DEFAULT_SLEEP)
@@ -116,7 +116,7 @@ func main() {
 
 			notification.Send("Hallelujah", "nowy termin: "+item, notification.TOKEN_AGATA)
 
-			notification.Send("Hallelujah", "nowy termin: "+item, notification.TOKEN_PIOTREK)
+			// notification.Send("Hallelujah", "nowy termin: "+item, notification.TOKEN_PIOTREK)
 		}
 
 		err = saveListToFile(consts.FILENAME, exams)
