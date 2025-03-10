@@ -29,7 +29,7 @@ func GetPracticalExams() ([]string, error) {
 
 	requestBody := map[string]string{
 		"category":  "B",
-		"endDate":   "2025-05-12T10:18:32.240Z",
+		"endDate":   "2025-03-28T10:18:32.240Z",
 		"startDate": "2025-03-11T11:18:32.240Z",
 		"wordId":    "25",
 	}
