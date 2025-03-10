@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"piotrek813/word-bo-piwo/client"
 	"piotrek813/word-bo-piwo/consts"
@@ -78,11 +79,13 @@ func checkForNewItems(filename string, newList []string) ([]string, error) {
 func heartbeat() {
 	for {
 		time.Sleep(time.Hour)
-		notification.Send("Jeszcze sie nie wysrało", "Do usyszenia za godzinkę jeśli Bóg da")
+		notification.Send("Jeszcze sie nie wysrało", "Do usyszenia za godzinkę jeśli Bóg da", notification.TOKEN_AGATA)
 	}
 }
 
 func main() {
+	log.Println("INFO: Starting up...")
+
 	client.Init()
 
 	go heartbeat()
@@ -117,7 +120,10 @@ func main() {
 		fmt.Println("New exam term foudn:")
 		for _, item := range newItems {
 			fmt.Printf("term: %v\n", item)
-			notification.Send("Hallelujah", "nowy termin: "+item)
+
+			notification.Send("Hallelujah", "nowy termin: "+item, notification.TOKEN_AGATA)
+
+			notification.Send("Hallelujah", "nowy termin: "+item, notification.TOKEN_PIOTREK)
 		}
 
 		err = saveListToFile(consts.FILENAME, exams)

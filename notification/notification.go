@@ -7,19 +7,24 @@ import (
 	"net/url"
 )
 
+const (
+	TOKEN_PIOTREK = "djo2mpG6o"
+	TOKEN_AGATA   = "RX75mpG6L"
+)
+
 func SendError(error error) {
 	log.Println("ERROR: " + error.Error())
 
-	Send("No i jednak nie działa jak powinno", error.Error())
+	Send("No i jednak nie działa jak powinno", error.Error(), TOKEN_PIOTREK)
 }
 
-func Send(title string, message string) {
+func Send(title string, message string, token string) {
 	// Base URL
 	baseURL := "https://wirepusher.com/send"
 
 	// Query parameters
 	params := url.Values{}
-	params.Add("id", "djo2mpG6o")
+	params.Add("id", token)
 	params.Add("title", title)
 	params.Add("message", message)
 	// params.Add("type", "monitoring")

@@ -60,6 +60,12 @@ func GetPracticalExams(token string) ([]string, error) {
 
 	fmt.Println("Response Status:", resp.Status)
 
+	if resp.StatusCode == http.StatusUnauthorized {
+		Init()
+
+		return nil, fmt.Errorf("Token has expired, regenerating")
+	}
+
 	body, err := io.ReadAll(resp.Body)
 
 	if title, err := getTitle(string(body)); err == nil {

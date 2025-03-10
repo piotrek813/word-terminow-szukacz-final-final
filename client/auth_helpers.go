@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -45,6 +46,9 @@ func getCSRFToken() (string, error) {
 func Login(username, password string) error {
 	// Get CSRF token
 	csrfToken, err := getCSRFToken()
+
+	log.Println("INFO: got csrfToken: " + csrfToken)
+
 	if err != nil {
 		return err
 	}
@@ -73,10 +77,13 @@ func Login(username, password string) error {
 	defer resp.Body.Close()
 
 	// Read response
-	_, err = io.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
+
 	if err != nil {
 		return fmt.Errorf("error reading response: %w", err)
 	}
+
+	fmt.Println("INFO login reponse body: " + string(body))
 
 	return nil
 }
@@ -112,8 +119,6 @@ func createNonce() (string, error) {
 func GetAccessToken() (string, error) {
 	godotenv.Load()
 
-	fmt.Printf("os.Getenv(\"INFO_CAR_LOGIN\"): %v\n", os.Getenv("INFO_CAR_LOGIN"))
-	fmt.Printf("os.Getenv(\"INFO_CAR_PASSWORD\"): %v\n", os.Getenv("INFO_CAR_PASSWORD"))
 	Login(os.Getenv("INFO_CAR_LOGIN"), os.Getenv("INFO_CAR_PASSWORD"))
 
 	nouce, err := createNonce()
@@ -146,6 +151,8 @@ func GetAccessToken() (string, error) {
 	}
 
 	location = strings.Replace(location, "refresh.html#", "?", 1)
+
+	log.Println("INFO: access_token response location header: " + location)
 
 	parsedURL, err := url.Parse(location)
 	if err != nil {
