@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"piotrek813/word-bo-piwo/notification"
 	"regexp"
 	"strings"
 
@@ -116,7 +117,7 @@ func createNonce() (string, error) {
 	return base64UrlEncode(bytes), nil
 }
 
-func GetAccessToken() (string, error) {
+func GetAccessToken() {
 	godotenv.Load()
 
 	Login(os.Getenv("INFO_CAR_LOGIN"), os.Getenv("INFO_CAR_PASSWORD"))
@@ -140,14 +141,16 @@ func GetAccessToken() (string, error) {
 	// Make the GET request with the custom no-redirect client
 	resp, err := client.Get(fullURL)
 	if err != nil {
-		return "", fmt.Errorf("error making request: %w", err)
+		notification.SendError(fmt.Errorf("error making request: %w", err))
+		return
 	}
 	defer resp.Body.Close()
 
 	// Extract the Location header
 	location := resp.Header.Get("Location")
 	if location == "" {
-		return "", fmt.Errorf("Location header not found")
+		notification.SendError(fmt.Errorf("Location header not found"))
+		return
 	}
 
 	location = strings.Replace(location, "refresh.html#", "?", 1)
@@ -156,14 +159,17 @@ func GetAccessToken() (string, error) {
 
 	parsedURL, err := url.Parse(location)
 	if err != nil {
-		return "", fmt.Errorf("error parsing location URL: %w", err)
+		notification.SendError(fmt.Errorf("error parsing location URL: %w", err))
+		return
 	}
 
 	// Extract the access_token query parameter
 	accessToken := parsedURL.Query().Get("access_token")
 	if accessToken == "" {
-		return "", fmt.Errorf("access_token not found in the URL")
+		notification.SendError(fmt.Errorf("access_token not found in the URL"))
+		return
 	}
 
-	return accessToken, nil
+	log.Println("INFO: bearer: " + accessToken)
+	bearer = accessToken
 }

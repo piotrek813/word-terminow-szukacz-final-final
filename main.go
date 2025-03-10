@@ -79,7 +79,7 @@ func checkForNewItems(filename string, newList []string) ([]string, error) {
 func heartbeat() {
 	for {
 		time.Sleep(time.Hour)
-		notification.Send("Jeszcze sie nie wysrało", "Do usyszenia za godzinkę jeśli Bóg da", notification.TOKEN_AGATA)
+		notification.Send("Jeszcze sie nie wysrało", "Do usyszenia za godzinkę jeśli Bóg da", notification.TOKEN_PIOTREK)
 	}
 }
 
@@ -90,16 +90,9 @@ func main() {
 
 	go heartbeat()
 
-	bearer, err := client.GetAccessToken()
-
-	if err != nil {
-		notification.SendError(err)
-	}
-
-	fmt.Printf("bearer: %v\n", bearer)
 	for {
 		time.Sleep(consts.DEFAULT_SLEEP)
-		exams, err := client.GetPracticalExams(bearer)
+		exams, err := client.GetPracticalExams()
 
 		if err != nil {
 			notification.SendError(err)

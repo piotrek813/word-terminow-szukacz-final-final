@@ -22,7 +22,7 @@ func getTitle(body string) (string, error) {
 	return "", fmt.Errorf("No title found")
 }
 
-func GetPracticalExams(token string) ([]string, error) {
+func GetPracticalExams() ([]string, error) {
 	fmt.Printf("INFO [%v]: Fetching exam\n", time.Now())
 
 	url := "https://info-car.pl/api/word/word-centers/exam-schedule"
@@ -47,7 +47,7 @@ func GetPracticalExams(token string) ([]string, error) {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Authorization", "Bearer "+bearer)
 
 	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Do(req)

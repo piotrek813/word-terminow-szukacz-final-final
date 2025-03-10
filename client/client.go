@@ -7,6 +7,7 @@ import (
 
 // Global HTTP client with a cookie jar
 var client *http.Client
+var bearer string
 
 func Init() *http.Client {
 	jar, _ := cookiejar.New(nil)
@@ -16,6 +17,8 @@ func Init() *http.Client {
 			return http.ErrUseLastResponse
 		},
 	}
+
+	GetAccessToken()
 
 	return client
 }
