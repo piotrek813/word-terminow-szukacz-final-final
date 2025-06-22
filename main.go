@@ -76,19 +76,10 @@ func checkForNewItems(filename string, newList []string) ([]string, error) {
 	return newItems, nil
 }
 
-// func heartbeat() {
-// 	for {
-// 		time.Sleep(time.Hour)
-// 		notification.Send("Jeszcze sie nie wysrało", "Do usyszenia za godzinkę jeśli Bóg da", notification.TOKEN_PIOTREK)
-// 	}
-// }
-
 func main() {
 	log.Println("INFO: Starting up...")
 
 	client.Init()
-
-	// go heartbeat()
 
 	for {
 		time.Sleep(consts.DEFAULT_SLEEP)

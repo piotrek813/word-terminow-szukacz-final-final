@@ -5,17 +5,11 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-)
-
-const (
-	// TOKEN_PIOTREK = "djo2mpG6o"
-	TOKEN_AGATA = "RX75mpG6L"
+	"os"
 )
 
 func SendError(error error) {
 	log.Println("ERROR: " + error.Error())
-
-	// Send("No i jednak nie działa jak powinno", error.Error(), TOKEN_PIOTREK)
 }
 
 func Send(title string, message string, token string) {
@@ -24,7 +18,7 @@ func Send(title string, message string, token string) {
 
 	// Query parameters
 	params := url.Values{}
-	params.Add("id", token)
+	params.Add("id", os.Getenv("INFO_CAR_LOGIN"))
 	params.Add("title", title)
 	params.Add("message", message)
 	// params.Add("type", "monitoring")
